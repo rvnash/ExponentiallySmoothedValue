@@ -7,6 +7,7 @@
 
 
 #pragma once
+#include "Particle.h" // Needed for millis()
 #include <math.h>  // Needed for exp()
 
 class ExponentiallySmoothedValue
