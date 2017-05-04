@@ -1,5 +1,5 @@
 #pragma once
-#include <math.h>
+#include <math.h>  // Needed for exp()
 
 class ExponentiallySmoothedValue
 {
@@ -10,8 +10,10 @@ public:
     // Time constant in seconds.
     // The time constant of an exponential moving average is the amount of time
     // for the smoothed response of a unit step function to reach aproximagely 1-1/e or (63.2%) of the stepped signal.
-    // See the wikipedia page here: https://en.wikipedia.org/wiki/Exponential_smoothing
-    // timeConstant - Must be > 0.0, otherwise this code may throw math errors like divide by zero.
+    // See the wikipedia page here:
+    //   https://en.wikipedia.org/wiki/Exponential_smoothing#Basic_exponential_smoothing
+    // timeConstant - The time constant described in the above wikipedia article. The units are seconds. It
+    // must be > 0.0, otherwise this code may throw math errors like divide by zero.
     ExponentiallySmoothedValue(float timeConstant)
     {
         tau = timeConstant;
@@ -38,7 +40,20 @@ public:
     }
 
     // Adds a sample to the filtered value according to the time constant.
-    // sample: The sampled value.
+    // Note this class keeps internal track of the time (using millis()) of the last entry, and
+    // gives more weight to samples that have taken a long time to arrive, based on the time
+    // constant. In the limit, if a sample takes much longer than the time constant to arrive, then 
+    // it will be essentially set as the current value. In the other limit, if a new entry takes a very
+    // short amount of time to arrive compared to the time constant, it will recieve very little weight.
+    //
+    // Note also: Using millis() means that this function will be thrown off by sleep, since the internal
+    // millis() counter is stopped during sleep.
+    //
+    // Finally note: this function does an exp() function, along with two float divides, two float multiplies,
+    // and 2 float add/subtracts. 
+    //
+    // Parameter
+    //  sample: The sampled value.
     // Returns: The current value (same as val())
     float newSample(float sample)
     {
@@ -60,8 +75,8 @@ public:
     }
 
   private:
-      bool initialized;
-      float currentValue;
-      float tau;
-      unsigned long lastSample;
+      bool initialized;  // Has a value been stored yet?
+      float currentValue;  // The currrent internal smoothed value
+      float tau; // The time constant.
+      unsigned long lastSample;   // The millis() time the last sample was stored.
 };
