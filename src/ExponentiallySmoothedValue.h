@@ -49,8 +49,9 @@ public:
     // Note also: Using millis() means that this function will be thrown off by sleep, since the internal
     // millis() counter is stopped during sleep.
     //
-    // Finally note: this function does an exp() function, along with two float divides, two float multiplies,
-    // and 2 float add/subtracts. 
+    // Finally note: this function does more floating point math than you might expect. It does
+    // a conversion from float to double, a conversion from double to float, an exp() function on a double,
+    // two float divides, two float multiplies, and 2 float add/subtracts. 
     //
     // Parameter
     //  sample: The sampled value.
