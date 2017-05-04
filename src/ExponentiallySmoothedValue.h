@@ -1,3 +1,11 @@
+//
+//    ExponentiallySmoothedValue.h
+//    Purpose: ExponentiallySmoothedValue library header and implementation
+//
+//    Author: Richard Nash
+//    Version: 1.0.0
+
+
 #pragma once
 #include <math.h>  // Needed for exp()
 
